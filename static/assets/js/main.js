@@ -257,3 +257,18 @@
   });
 
 })()
+
+//Javascript Color Picker
+document.documentElement.style.setProperty("--default-primary", localStorage.getItem("userThemeColor"));
+
+var colorInput = document.querySelector("#color-picker");
+
+colorInput.addEventListener("change", function() {
+  
+  // Theme the site!
+  document.documentElement.style.setProperty("--default-primary", this.value);
+  
+  // Save the value for next time page is visited.
+  localStorage.setItem("userThemeColor", this.value);
+  
+});
