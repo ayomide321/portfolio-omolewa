@@ -66,24 +66,49 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--default-primary);
   width: 60px;
   height: 60px;
+  align-items: center;
+  justify-content: center;
   border-radius: 50px;
   transition: all 0.4s;
 }
 
 .theme i {
+  transition: all 0.6s;
   font-size: 28px;
   color: #fff;
   line-height: 0;
+  position: absolute;
 }
 
-.theme:hover {
+#color-label:hover #button-theme {
   filter: brightness(1.25);
   color: #fff;
+  width: 140px;
 }
 
-.theme.active {
+.theme-text{
+  transition-delay: 0.1s;
+  transform: translate(20%);
+  visibility: hidden;
+}
+
+
+#color-label:hover .theme-text{
+  color: #fff;
   visibility: visible;
-  opacity: 1;
+  transform: translate(20%);
+  transition-delay: 0.4s;
+}
+
+#color-label:hover i {
+  transition: all 0.5s;
+  transition-delay: 0.1s;
+  margin-left: 20px;
+  transform: translate(-180%);
+}
+
+#color-label:focus-within #button-theme{
+  filter: brightness(1.25);
 }
 
 /*--------------------------------------------------------------
