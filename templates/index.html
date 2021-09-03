@@ -26,7 +26,6 @@
 
   <!-- Template Main CSS File -->
   <link href="static/assets/css/style.css" rel="stylesheet">
-
 </head>
 
 <body>
@@ -246,7 +245,7 @@
               <p><em>Innovative and deadline-driven Graphic Designer with 3+ years of experience designing and developing user-centered digital/print marketing material from initial concept to final, polished deliverable.</em></p>
               <ul>
                 <li>Dallas, TX</li>
-                <li>aayomideomolewa@gmail.com</li>
+                <li>ayomideomolewa@gmail.com</li>
               </ul>
             </div>
 
@@ -306,8 +305,7 @@
 
         <div class="section-title">
           <h2>Projects</h2>
-          <p>No great visionary is without their benchmarks of success. Personally, my work represents my benchmarks of success as they are reminders of the languages I have learned and the struggles I have overcome.</p>
-        </div>
+          <p>No great visionary is without their benchmarks of success. Personally, my work represents these benchmarks. I have displayed my github projects through a custom made pipeline that automatically pulls my selected repositories from my github account. </p>
 
         <div class="row">
           <div class="col-lg-12 d-flex justify-content-center" data-aos="fade-up" data-aos-delay="100">
@@ -322,6 +320,37 @@
 
         <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
 
+          {% for x in portfolioList  %}
+            <div class="col-lg-4 col-md-6 portfolio-item filter-{{ x.filter }}">
+              <div class="portfolio-wrap">
+                <img src="{{ x.image_url }}" class="img-fluid" alt="">
+                <div class="portfolio-info">
+                  <h4>{{ x.name }}</h4>
+                  <p>{{ x.description }}</p>
+                  <div class="portfolio-links">
+                    <a href="{{ x.image_url }}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="{{ x.name }}"><i class="bx bx-plus"></i></a>
+                    <a href="{{ x.url }}" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-corporate">
+            <div class="portfolio-wrap">
+              <img src="https://www.cinemasound.com/wp-content/uploads/2019/10/nvidia-logo.jpg" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4>Nvidia</h4>
+                <p>Final Presentation</p>
+                <div class="portfolio-links">
+                  <a href="https://www.cinemasound.com/wp-content/uploads/2019/10/nvidia-logo.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Paramount Trading"><i class="bx bx-plus"></i></a>
+                  <a href="https://portfolio-omolewa.s3.us-east-2.amazonaws.com/Omolewa_Internship_Presentation.pdf" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- INCASE OF BREAKAGE REFER TO PREVIOUS PORTFOLIO TEXT
           <div class="col-lg-4 col-md-6 portfolio-item filter-corporate">
             <div class="portfolio-wrap">
               <img src="static/assets/img/portfolio/portfolio-1.jpg" class="img-fluid" alt="">
@@ -446,7 +475,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div>-->
 
         </div>
 
@@ -737,9 +766,12 @@
   <script src="static/assets/vendor/swiper/swiper-bundle.min.js"></script>
   <script src="static/assets/vendor/typed.js/typed.min.js"></script>
   <script src="static/assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
 
   <!-- Template Main JS File -->
   <script src="static/assets/js/main.js"></script>
+  
 
 </body>
 
