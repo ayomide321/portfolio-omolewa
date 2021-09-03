@@ -4,8 +4,13 @@
     --font-primary: 'Raleway', sans-serif;
     --font-secondary: 'Poppins', sans-serif;
 
+
+    --hero-bg: "url(../img/hero-bg-ayo.jpg)";
+
+
     /* Colors */
     --default: #272829;
+    --default-white: #fff;
     --default-primary: #0563bb;
     --default-secondary: #45505b;
 

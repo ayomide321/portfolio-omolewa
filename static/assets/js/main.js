@@ -256,10 +256,69 @@
     })
   });
 
+    /*
+  new Chart(document.getElementById("skillChart"), {
+    type: 'radar',
+    data: {
+    labels: ["Algorithms", "Analysis", "Visualization", "Rubbish"],
+    datasets: [{
+      label: "Ayomide's Skills",
+      data: [80,90,85,90],
+      fill: true,
+      backgroundColor: 'rgba(219, 20, 0, 0.2)',
+      borderColor: document.documentElement.style.getPropertyValue("--default-primary"),
+    }],
+    
+  },
+   options: {
+      legend: {display: false},
+    tooltips: {
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              fontColor: document.documentElement.style.getPropertyValue("--default-primary")
+            }
+          }
+        ]
+      },
+      callbacks: {
+        label: function(tooltipItem, data) {
+          return data.datasets[tooltipItem.datasetIndex].label + ": " + tooltipItem.yLabel;
+        }
+      }
+    }
+  }
+  });
+  */
 })()
+
+function setContrast(hexcolor) {
+    hexcolor = hexcolor.replace("#", "");
+    var r = parseInt(hexcolor.substr(0,2),16);
+    var g = parseInt(hexcolor.substr(2,2),16);
+    var b = parseInt(hexcolor.substr(4,2),16);
+    const brightness = Math.round(((parseInt(r) * 299) +
+                      (parseInt(g) * 587) +
+                      (parseInt(b) * 114)) / 1000);
+
+    if(brightness > 128){
+      document.documentElement.style.setProperty("--default-white", "#272829");
+      document.documentElement.style.setProperty("--default", "#fff");
+      document.documentElement.style.setProperty("--default-secondary", "#CDCDCD");
+      document.documentElement.style.setProperty("--hero-bg", "url(../img/hero-night.png)")
+    } else {
+      document.documentElement.style.setProperty("--default-white", "#fff");
+      document.documentElement.style.setProperty("--default", "#272829");
+      document.documentElement.style.setProperty("--default-secondary", "#45505b");
+      document.documentElement.style.setProperty("--hero-bg", "url(../img/hero-bg-ayo.jpg)")
+    }
+    return brightness
+}
 
 //Javascript Color Picker
 document.documentElement.style.setProperty("--default-primary", localStorage.getItem("userThemeColor"));
+setContrast(document.documentElement.style.getPropertyValue("--default-primary"));
 
 var colorInput = document.querySelector("#color-picker");
 
@@ -267,8 +326,18 @@ colorInput.addEventListener("change", function() {
   
   // Theme the site!
   document.documentElement.style.setProperty("--default-primary", this.value);
-  
   // Save the value for next time page is visited.
   localStorage.setItem("userThemeColor", this.value);
+  //refreshDialer();
+  setContrast(document.documentElement.style.getPropertyValue("--default-primary"));
   
 });
+
+// Radar Chart
+function refreshDialer(){
+  //alert("In function");
+  var container = document.getElementById("skillChart");
+  var content = container.innerHTML;
+  //alert(content);
+  container.innerHTML= content;
+}
