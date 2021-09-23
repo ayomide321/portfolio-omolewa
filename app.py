@@ -31,8 +31,6 @@ def send_email(name, incoming_email, subject, body):
 		server = smtplib.SMTP("smtp.gmail.com", 587)
 		server.ehlo()
 		server.starttls()
-		print (GMAIL)
-		print (GMAIL_PASS)
 		server.login(GMAIL, GMAIL_PASS)
 		server.send_message(message)
 		server.close()
