@@ -5,12 +5,17 @@ import json
 import os
 from github import Github
 from dotenv import load_dotenv
+from flask_sslify import SSLify
+
+#configuration variables
 load_dotenv()
 GITHUB_KEY = os.getenv("GITHUB_KEY")
 GMAIL = os.getenv("GMAIL")
 GMAIL_PASS = os.getenv("GMAIL_PASS")
 app = Flask(__name__, template_folder='templates')
 g = Github(GITHUB_KEY)
+sslify = SSLify(app)
+
 
 # Email information
 def send_email(name, incoming_email, subject, body):
