@@ -333,7 +333,8 @@ h1, h2, h3, h4, h5, h6 {
 
 #hero:before {
   content: "";
-  background: rgba(255, 255, 255, 0.4);
+  background: var(--default-white);
+  opacity: .4;
   position: absolute;
   bottom: 0;
   top: 0;
@@ -381,6 +382,7 @@ h1, h2, h3, h4, h5, h6 {
 @media (max-width: 992px) {
   #hero {
     text-align: center;
+    background-position-x: 85%;
   }
   #hero h1 {
     font-size: 32px;
@@ -1249,4 +1251,17 @@ section {
 
 #footer .credits {
   font-size: 13px;
+}
+
+
+#moneycounter:before {
+  content: "$";
+}
+
+#moneycounter:after {
+  content: "K+";
+}
+
+#counter-customer:after {
+  content: "+";
 }
