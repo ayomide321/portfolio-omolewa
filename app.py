@@ -28,11 +28,14 @@ def send_email(name, incoming_email, subject, body):
 	message['From'] = FROM
 	message['TO'] = TO
 	try:
+		print (1)
 		server = smtplib.SMTP("smtp.gmail.com", 587)
 		server.ehlo()
 		server.starttls()
+		print (2)
 		server.login(GMAIL, GMAIL_PASS)
 		server.send_message(message)
+		print (3)
 		server.close()
 		print ('successfully sent the mail')
 	except(err):
