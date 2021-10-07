@@ -16,7 +16,6 @@ app = Flask(__name__, template_folder='templates')
 g = Github(GITHUB_KEY)
 sslify = SSLify(app)
 
-
 # Email information
 def send_email(name, incoming_email, subject, body):
 

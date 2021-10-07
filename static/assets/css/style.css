@@ -320,7 +320,6 @@ h1, h2, h3, h4, h5, h6 {
   height: 100vh;
   background: var(--hero-bg) top right no-repeat;
   background-color: var(--default);
-  mix-blend-mode: multiply;
   background-size: cover;
   position: relative;
 }
