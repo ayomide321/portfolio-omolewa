@@ -44,16 +44,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .chat-main {
- height: 80vh;
+ height: 70vh;
 }
 
 .chat-content {
-  height: 70vh;
+  height: 60vh;
   overflow: hidden;
   overflow-y: scroll;
 }
 .chat-container {
-  height: 90vh;
+  height: 80vh;
   display: flex;
   flex-direction: column;
 }
