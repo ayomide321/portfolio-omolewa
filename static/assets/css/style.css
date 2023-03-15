@@ -52,7 +52,11 @@ h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
   overflow-y: scroll;
 }
-
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
 .typing-cursor {
   width: 0.5em;
   height: 1.2em;

@@ -160,18 +160,22 @@
             let messageText = $("<span>");
             let botIcon = $("<i>").addClass("bi bi-chat-square-dots me-2 global-icon");
             let messageDiv = $("<div>").addClass("message d-flex align-items-start");
-            messageDiv.append(botIcon, messageText);
+            messageDiv.append(botIcon);
             let botDiv = $("<div>").addClass("bot");
             botDiv.append(messageDiv);
             $("#chat-content").append(botDiv);
 
+            let messageWrapper = $("<div>").addClass("message-wrapper");
+            messageDiv.append(messageWrapper);
+
             let cursor = $("<span>").addClass("typing-cursor");
-            messageDiv.append(cursor);
+            messageWrapper.append(messageText, cursor);
 
             scrollToBottom();
 
             return messageText;
         }
+
 
 
 
@@ -222,7 +226,7 @@
           $("#chat-content").animate({ scrollTop: $("#chat-content")[0].scrollHeight }, "fast");
         }
 
-        async function typeText(element, text, delay = 50) {
+        async function typeText(element, text, delay = 15) {
             let sendButton = $("#chat-form button[type='submit']");
             let cursor = element.parent().find(".typing-cursor");
             for (let char of text.split("")) {
