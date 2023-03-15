@@ -23,11 +23,23 @@
   <link href="static/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
   <link href="static/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="static/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <!-- Prism.js CSS for syntax highlighting -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism.min.css" rel="stylesheet" />
 
   <!-- Template Main CSS File -->
   <link href="static/assets/css/style.css" rel="stylesheet">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
+
+<!-- Prism.js library for syntax highlighting -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/prism.min.js"></script>
+<!-- Prism.js clipboard plugin for copy code functionality -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/plugins/clipboard/prism-clipboard.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+
+
+
 </head>
 <body>
     <i class="bi bi-list mobile-nav-toggle d-xl-none"></i>
@@ -73,17 +85,25 @@
     <!-- Template Main JS File -->
     <script src="static/assets/js/main.js"></script>
     <script>
+        let isTyping = false;
+        document.addEventListener("DOMContentLoaded", () => {
+            new ClipboardJS(".code-copy");
+        });
         $(document).ready(function () {
           $("#chat-form").on("submit", function (event) {
             event.preventDefault();
+            if(isTyping){
+                return;
+            }
             let user_message = $("#user_message").val();
             if (user_message.trim() === "") return;
-  
+            let sendButton = $("#chat-form button[type='submit']");
+            sendButton.prop("disabled", true);
             // Display user message
             displayUserMessage(user_message);
 
             displayLoading();
-  
+            isTyping = true;
             // Send the message to the server
             $.ajax({
               url: "/chat-new",
@@ -92,13 +112,30 @@
               success: function (data) {
                 // Display the bot's response
                 $("#chat-content .loading:last").remove();
-                displayBotMessage(data.bot_response);
+                let messageElement = displayBotMessage("");
+                let formattedMessage = formatMessage(data.bot_response);
+                typeText(messageElement, formattedMessage).then(() => {
+                    console.log(data);
+                });
                 console.log(data)
+                const clipboard = new ClipboardJS(".code-copy"); // Initialize clipboard.js
+  
+                // Add event listener for 'success' event
+                clipboard.on('success', function (e) {
+                    const originalText = e.trigger.innerHTML;
+                    e.trigger.innerHTML = 'Copied!';
+                    setTimeout(() => {
+                    e.trigger.innerHTML = originalText;
+                    }, 2000);
+                    e.clearSelection();
+                });
               },
               error: function (error) {
                 console.log("Error:", error);
                 $("#chat-content .loading:last").remove();
                 displayBotMessage(`My fault gang, lowkey folded. Hit the real me up about this problem: ${error.statusText}`)
+                isTyping = false;
+                sendButton.prop("disabled", true);
               },
             });
   
@@ -108,9 +145,10 @@
         });
   
         function displayUserMessage(message) {
-            let messageText = $("<span>").text(message);
+            let formattedMessage = formatMessage(message);
+            let messageText = $("<span>").html(formattedMessage);
             let userIcon = $("<i>").addClass("bi bi-person-circle me-2 global-icon");
-            let messageDiv = $("<div>").addClass("message d-flex align-items-center");
+            let messageDiv = $("<div>").addClass("message d-flex align-items-start");
             messageDiv.append(userIcon, messageText);
             let userDiv = $("<div>").addClass("user");
             userDiv.append(messageDiv);
@@ -119,31 +157,81 @@
         }
 
         function displayBotMessage(message) {
-            let messageText = $("<span>").text(message);
+            let messageText = $("<span>");
             let botIcon = $("<i>").addClass("bi bi-chat-square-dots me-2 global-icon");
-            let messageDiv = $("<div>").addClass("message d-flex align-items-center");
+            let messageDiv = $("<div>").addClass("message d-flex align-items-start");
             messageDiv.append(botIcon, messageText);
             let botDiv = $("<div>").addClass("bot");
             botDiv.append(messageDiv);
             $("#chat-content").append(botDiv);
+
+            let cursor = $("<span>").addClass("typing-cursor");
+            messageDiv.append(cursor);
+
             scrollToBottom();
+
+            return messageText;
         }
 
 
 
+
         function displayLoading() {
-            let spinnerDiv = $("<div>").addClass("spinner");
+            let typingCursor = $("<div>").addClass("typing-cursor");
             let botIcon = $("<i>").addClass("bi bi-chat-square-dots me-2 global-icon");
-            let messageDiv = $("<div>").addClass("message loading");
-            messageDiv.append(botIcon, spinnerDiv);
+            let messageDiv = $("<div>").addClass("message loading d-flex align-items-start");
+            messageDiv.append(botIcon, typingCursor);
             let botDiv = $("<div>").addClass("bot");
             botDiv.append(messageDiv);
             $("#chat-content").append(botDiv);
             scrollToBottom();
         }
+
             
+        function formatMessage(message) {
+            const codeRegex = /```[\s\S]*?```/g;
+            const matches = message.match(codeRegex);
+
+            if (matches) {
+                matches.forEach((match, index) => {
+                const codeContent = match.slice(3, -3).trim();
+                const escapedCodeContent = $('<div>').text(codeContent).html();
+                const codeHtml = `
+                    <span class="entire-code-container">
+                    <div class="code-container">
+                    <button class="code-copy" data-clipboard-target="#code-${index}">Copy</button>
+                    <pre><code id="code-${index}" class="language-javascript">${escapedCodeContent}</code></pre>
+                    </div>
+                    </span>`;
+                message = message.replace(match, codeHtml);
+                });
+            }
+
+            return message;
+        }
+
+
+
+
+        function convertMarkdownToHtml(markdown) {
+            const converter = new showdown.Converter();
+            return converter.makeHtml(markdown);
+        }
+
         function scrollToBottom() {
           $("#chat-content").animate({ scrollTop: $("#chat-content")[0].scrollHeight }, "fast");
+        }
+
+        async function typeText(element, text, delay = 50) {
+            let sendButton = $("#chat-form button[type='submit']");
+            let cursor = element.parent().find(".typing-cursor");
+            for (let char of text.split("")) {
+                await new Promise((resolve) => setTimeout(resolve, delay));
+                element.append(char);
+            }
+            cursor.remove(); 
+            sendButton.prop("disabled", false);
+            isTyping = false;
         }
       </script>
 </body>
