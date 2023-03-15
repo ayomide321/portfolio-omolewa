@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Ayomide Omolewa</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+  <meta property="og:image" content="/static/assets/img/apple-touch-icon.png">
+
+  <!-- Favicons -->
+  <link href="/static/assets/img/favicon.png" rel="icon">
+  <link href="/static/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="static/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="static/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="static/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="static/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="static/assets/css/style.css" rel="stylesheet">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <i class="bi bi-list mobile-nav-toggle d-xl-none"></i>
+    <!-- ======= Header ======= -->
+    <header id="header" class="d-flex flex-column justify-content-center">
+
+        <nav id="navbar" class="navbar nav-menu">
+        <ul>
+            <li><a href="/#hero" class="nav-link scrollto"><i class="bx bx-home"></i> <span>Home</span></a></li>
+            <li><a href="/#about" class="nav-link scrollto"><i class="bx bx-user"></i> <span>About</span></a></li>
+            <li><a href="/#resume" class="nav-link scrollto"><i class="bx bx-file-blank"></i> <span>Resume</span></a></li>
+            <li><a href="/#portfolio" class="nav-link scrollto"><i class="bx bx-book-content"></i> <span>Portfolio</span></a></li>
+            <!--<li><a href="#services" class="nav-link scrollto"><i class="bx bx-server"></i> <span>Services</span></a></li>-->
+            <li><a href="/#contact" class="nav-link scrollto"><i class="bx bx-envelope"></i> <span>Contact</span></a></li>
+            <li><a href="/chat" class="nav-link scrollto active"><i class="bx bx-chat"></i> <span>ChatAYO</span></a></li>
+        </ul>
+        </nav><!-- .nav-menu -->
+
+    </header><!-- End Header -->
+    <div class="container my-5">
+        <h1 class="text-center mb-5">ChatAYO</h1>
+        <div class="card chat-main">
+            <div class="chat-content" id="chat-content">
+            </div>
+            <div class="card-footer chat-input p-3">
+                <form id="chat-form" class="d-flex">
+                    <input type="text" id="user_message" class="form-control me-2" placeholder="Type your message...">
+                    <button type="submit" class="btn btn-primary">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="/static/js/script.js"></script>
+
+    <!-- Vendor JS Files -->
+    <script src="static/assets/vendor/aos/aos.js"></script>
+    <script src="static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="static/assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="static/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+    <script src="static/assets/vendor/php-email-form/validate.js"></script>
+    <script src="static/assets/vendor/swiper/swiper-bundle.min.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="static/assets/js/main.js"></script>
+    <script>
+        $(document).ready(function () {
+          $("#chat-form").on("submit", function (event) {
+            event.preventDefault();
+            let user_message = $("#user_message").val();
+            if (user_message.trim() === "") return;
+  
+            // Display user message
+            displayUserMessage(user_message);
+
+            displayLoading();
+  
+            // Send the message to the server
+            $.ajax({
+              url: "/chat-new",
+              method: "POST",
+              data: { user_message: user_message },
+              success: function (data) {
+                // Display the bot's response
+                $("#chat-content .loading:last").remove();
+                displayBotMessage(data.bot_response);
+                console.log(data)
+              },
+              error: function (error) {
+                console.log("Error:", error);
+                $("#chat-content .loading:last").remove();
+                displayBotMessage(`My fault gang, lowkey folded. Hit the real me up about this problem: ${error.statusText}`)
+              },
+            });
+  
+            // Clear the input field
+            $("#user_message").val("");
+          });
+        });
+  
+        function displayUserMessage(message) {
+            let messageText = $("<span>").text(message);
+            let userIcon = $("<i>").addClass("bi bi-person-circle me-2 global-icon");
+            let messageDiv = $("<div>").addClass("message d-flex align-items-center");
+            messageDiv.append(userIcon, messageText);
+            let userDiv = $("<div>").addClass("user");
+            userDiv.append(messageDiv);
+            $("#chat-content").append(userDiv);
+            scrollToBottom();
+        }
+
+        function displayBotMessage(message) {
+            let messageText = $("<span>").text(message);
+            let botIcon = $("<i>").addClass("bi bi-chat-square-dots me-2 global-icon");
+            let messageDiv = $("<div>").addClass("message d-flex align-items-center");
+            messageDiv.append(botIcon, messageText);
+            let botDiv = $("<div>").addClass("bot");
+            botDiv.append(messageDiv);
+            $("#chat-content").append(botDiv);
+            scrollToBottom();
+        }
+
+
+
+        function displayLoading() {
+            let spinnerDiv = $("<div>").addClass("spinner");
+            let botIcon = $("<i>").addClass("bi bi-chat-square-dots me-2 global-icon");
+            let messageDiv = $("<div>").addClass("message loading");
+            messageDiv.append(botIcon, spinnerDiv);
+            let botDiv = $("<div>").addClass("bot");
+            botDiv.append(messageDiv);
+            $("#chat-content").append(botDiv);
+            scrollToBottom();
+        }
+            
+        function scrollToBottom() {
+          $("#chat-content").animate({ scrollTop: $("#chat-content")[0].scrollHeight }, "fast");
+        }
+      </script>
+</body>
+</html>
