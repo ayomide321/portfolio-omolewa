@@ -65,6 +65,12 @@ h1, h2, h3, h4, h5, h6 {
   animation: blink 1s step-end infinite;
 }
 
+@media (max-width: 576px) {
+  .chat-container {
+    height: calc(90vh - 60px); /* 60px is an arbitrary value to adjust the height for mobile */
+  }
+}
+
 @keyframes blink {
   from,
   to {
