@@ -9,7 +9,6 @@ from dotenv import load_dotenv
 from flask_sslify import SSLify
 import openai
 
-
 #configuration variables
 load_dotenv()
 assistantContext = '''
